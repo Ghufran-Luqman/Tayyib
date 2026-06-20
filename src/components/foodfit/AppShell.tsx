@@ -59,7 +59,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex max-w-7xl">
+      <div className="mx-auto flex">
         {/* Sidebar (desktop) */}
         <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r bg-sidebar p-4 md:flex">
           <Link to="/" className="mb-8 flex items-center gap-2 px-2">
