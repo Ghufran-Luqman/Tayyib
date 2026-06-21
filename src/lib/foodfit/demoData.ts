@@ -173,7 +173,7 @@ export const demoFoods: Food[] = [
       sodium: 524,
     },
     ingredients:
-      "British or Irish Pork (90%), Water, Sea Salt, Flavouring, Rice Flour, Chickpea Flour, Ground Spices (Coriander, White Pepper, Nutmeg), Dried Onion, Antioxidant: Ascorbic Acid; Salt, Cornflour, Dextrose. Sausages filled into natural vegetable casings.",
+      "Pork, Water, Sea Salt, Flavouring, Rice Flour, Chickpea Flour, Ground Spices (Coriander, White Pepper, Nutmeg), Dried Onion, Antioxidant: Ascorbic Acid; Salt, Cornflour, Dextrose. Sausages filled into natural vegetable casings.",
     allergens: [],
     additives: ["e300"],
     nutriscore: "d",
