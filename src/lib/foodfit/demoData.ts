@@ -12,7 +12,7 @@ export const demoProfile: HealthProfile = {
   goal: "manage-blood-sugar",
   medicalConditions: ["diabetes", "hypertension"],
   allergies: [],
-  dietaryPreferences: ["low-sugar", "low-sodium"],
+  dietaryPreferences: ["low-sugar", "low-sodium", "halal"],
   clinicianLimits: {
     calorieTarget: 2000,
     sodiumLimitMg: 1500,
