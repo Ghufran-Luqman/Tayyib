@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { ArrowRight, Plus, Sparkles } from "lucide-react";
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { PageBody, PageHeader } from "@/components/foodfit/AppShell";
 import { NutritionFactsCard } from "@/components/foodfit/NutritionFactsCard";
@@ -8,6 +9,8 @@ import { UltraProcessedBadge } from "@/components/foodfit/UltraProcessedBadge";
 import { SourceAttribution } from "@/components/foodfit/SourceAttribution";
 import { EmptyState } from "@/components/foodfit/EmptyState";
 import { useFoodFitStore } from "@/lib/foodfit/store";
+import { analyzeFood } from "@/lib/analysis/analyzeFood";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_app/food/$id")({
   head: () => ({ meta: [{ title: "Food details · Tayyib" }] }),
@@ -17,6 +20,15 @@ export const Route = createFileRoute("/_app/food/$id")({
 function FoodDetail() {
   const { id } = useParams({ from: "/_app/food/$id" });
   const food = useFoodFitStore((s) => s.foodsCache[id]);
+  const profile = useFoodFitStore((s) => s.profile);
+  const mealLogs = useFoodFitStore((s) => s.mealLogs);
+  const foods = useFoodFitStore((s) => s.foodsCache);
+  const halalStrictness = useFoodFitStore((s) => s.settings.halalStrictness);
+
+  const analysis = useMemo(
+    () => (food ? analyzeFood(food, profile, mealLogs, foods, halalStrictness) : null),
+    [food, profile, mealLogs, foods, halalStrictness],
+  );
 
   if (!food) {
     return (
@@ -77,6 +89,46 @@ function FoodDetail() {
               </span>
             </div>
             <SourceAttribution source={food.source} className="mt-3" />
+
+            {analysis && (
+              <div
+                className={cn(
+                  "mt-3 rounded-2xl border p-4",
+                  analysis.verdict === "red"
+                    ? "border-fit-red/40 bg-fit-red/5"
+                    : analysis.verdict === "amber"
+                      ? "border-fit-amber/40 bg-fit-amber/5"
+                      : "border-fit-green/40 bg-fit-green/5",
+                )}
+              >
+                <div className="flex items-center justify-between">
+                  <span
+                    className={cn(
+                      "text-xs font-bold uppercase tracking-wider",
+                      analysis.verdict === "red"
+                        ? "text-fit-red"
+                        : analysis.verdict === "amber"
+                          ? "text-fit-amber"
+                          : "text-fit-green",
+                    )}
+                  >
+                    {analysis.verdict === "red"
+                      ? "Best avoided"
+                      : analysis.verdict === "amber"
+                        ? "Occasional"
+                        : "Good fit"}
+                  </span>
+                  <span className="font-display text-lg font-bold">{analysis.score}/100</span>
+                </div>
+                <p className="mt-1 text-sm text-foreground/85">{analysis.summary}</p>
+                <Button asChild size="sm" variant="outline" className="mt-3 w-full">
+                  <Link to="/analyze/$id" params={{ id: food.id }}>
+                    Full verdict & ingredient checks
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="space-y-4 md:col-span-2">
