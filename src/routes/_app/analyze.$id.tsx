@@ -94,6 +94,7 @@ function AnalyzePage() {
                 analysis={analysis}
                 profile={profile}
                 language={language}
+                halalStrictness={halalStrictness}
                 todayContext={todayContext}
                 fallback={analysis.summary}
               />

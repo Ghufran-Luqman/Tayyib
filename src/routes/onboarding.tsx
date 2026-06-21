@@ -165,8 +165,16 @@ function Onboarding() {
   const steps: StepId[] = useMemo(() => {
     const base: StepId[] = ["track", "nickname", "ageRange", "sex", "height", "weight"];
     const fitnessSteps: StepId[] = ["fitnessGoal", "activity", "exerciseFreq", "struggle"];
-    const conditionSteps: StepId[] = ["condition", "diagnosed", "nutrientsWatch", "caution"];
-    const tail: StepId[] = ["allergies", "dietary", "halal"];
+    const hasConditions = (form.medicalConditions?.length ?? 0) > 0;
+    // The follow-up condition questions only make sense once a condition is picked.
+    const conditionSteps: StepId[] = [
+      "condition",
+      ...((hasConditions ? ["diagnosed", "nutrientsWatch", "caution"] : []) as StepId[]),
+    ];
+    // If they already chose "Halal" as a dietary preference, don't ask the
+    // separate "do you follow halal requirements?" question again.
+    const pickedHalalDiet = form.dietaryPreferences?.includes("halal") ?? false;
+    const tail: StepId[] = ["allergies", "dietary", ...((pickedHalalDiet ? [] : ["halal"]) as StepId[])];
     const halalTail: StepId[] = (form.halalRequired ? ["halalStrict"] : []) as StepId[];
     const end: StepId[] = ["consent"];
     switch (form.track) {
@@ -179,7 +187,7 @@ function Onboarding() {
       default:
         return [...base, ...tail, ...halalTail, ...end];
     }
-  }, [form.track, form.halalRequired]);
+  }, [form.track, form.halalRequired, form.medicalConditions, form.dietaryPreferences]);
 
 
   const [idx, setIdx] = useState(0);
