@@ -156,4 +156,29 @@ export const demoFoods: Food[] = [
     dataConfidence: "high",
     createdAt: now,
   },
+  {
+    id: "demo-pork",
+    source: "demo",
+    name: "6 Pork Sausages",
+    brand: "Finnebrogue Naked",
+    servingSize: "1 sausage",
+    nutrition: {
+      calories: 227,
+      protein: 15.6,
+      carbs: 0.2,
+      sugar: 0.2,
+      fat: 18.0,
+      saturatedFat: 6.4,
+      fibre: 1.5,
+      sodium: 524,
+    },
+    ingredients:
+      "British or Irish Pork (90%), Water, Sea Salt, Flavouring, Rice Flour, Chickpea Flour, Ground Spices (Coriander, White Pepper, Nutmeg), Dried Onion, Antioxidant: Ascorbic Acid; Salt, Cornflour, Dextrose. Sausages filled into natural vegetable casings.",
+    allergens: [],
+    additives: ["e300"],
+    nutriscore: "d",
+    novaGroup: 4,
+    dataConfidence: "high",
+    createdAt: now,
+  }
 ];
