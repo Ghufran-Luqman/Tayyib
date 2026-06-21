@@ -173,7 +173,7 @@ export const demoFoods: Food[] = [
       sodium: 524,
     },
     ingredients:
-      "Pork, Water, Sea Salt, Flavouring, Rice Flour, Chickpea Flour, Ground Spices (Coriander, White Pepper, Nutmeg), Dried Onion, Antioxidant: Ascorbic Acid; Salt, Cornflour, Dextrose. Sausages filled into natural vegetable casings.",
+      "pork, Water, Sea Salt, Flavouring, Rice Flour, Chickpea Flour, Ground Spices (Coriander, White Pepper, Nutmeg), Dried Onion, Antioxidant: Ascorbic Acid; Salt, Cornflour, Dextrose. Sausages filled into natural vegetable casings.",
     allergens: [],
     additives: ["e300"],
     nutriscore: "d",
