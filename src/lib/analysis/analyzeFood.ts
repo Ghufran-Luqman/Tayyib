@@ -67,7 +67,10 @@ export function analyzeFood(
   }
 
   // Halal / Tayyib ingredient scan
-  const halalPref = profile?.halalStrictness ?? halalStrictness;
+  const halalPref =
+    profile?.halalStrictness && profile.halalStrictness !== "off"
+      ? profile.halalStrictness
+      : halalStrictness;
   if (halalPref && halalPref !== "off") {
     const hc = checkHalal(food, halalPref);
     if (hc.status === "haram") {
@@ -311,12 +314,20 @@ export function analyzeFood(
   }
 
   // Score & verdict
+  const hasAvoid = flags.some((f) => f.severity === "avoid");
+  const isHaram = flags.some((f) => f.id === "halal-haram");
+
   let score = 80;
   for (const f of flags) score -= severityWeight(f.severity);
   score += Math.min(positives.length * 4, 16);
   score = Math.max(5, Math.min(100, score));
 
-  const hasAvoid = flags.some((f) => f.severity === "avoid");
+  // A haram ingredient is a categorical fail — showing a numeric "fit %" for
+  // pork/alcohol is misleading and offensive in a halal context. Other hard
+  // blocks (allergens, gluten for coeliac, diet conflicts) are capped low too.
+  if (isHaram) score = 0;
+  else if (hasAvoid) score = Math.min(score, 20);
+
   const watchCount = flags.filter((f) => f.severity === "watch").length;
   let verdict: Verdict = "green";
   if (hasAvoid || score < 45) verdict = "red";
@@ -344,11 +355,13 @@ export function analyzeFood(
   }
 
   const verdictLine =
-    verdict === "red"
-      ? "This may be a poor fit for your profile today."
-      : verdict === "amber"
-        ? "This looks like an occasional choice for your profile."
-        : "This looks like a good fit for your profile.";
+    isHaram
+      ? "This isn't halal for your settings — it contains ingredients to avoid."
+      : verdict === "red"
+        ? "This may be a poor fit for your profile today."
+        : verdict === "amber"
+          ? "This looks like an occasional choice for your profile."
+          : "This looks like a good fit for your profile.";
 
   const summary = profile
     ? `${verdictLine} Based on your stated profile${
