@@ -155,7 +155,7 @@ export type Verdict = "green" | "amber" | "red";
 
 export interface RuleFlag {
   id: string;
-  severity: "info" | "watch" | "avoid";
+  severity: "info" | "watch" | "avoid" | "unfit";
   category: "allergy" | "condition" | "diet" | "nutrient" | "processed" | "intake" | "positive";
   message: string;
 }
