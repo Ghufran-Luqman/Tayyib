@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Loader2, Plus, Search } from "lucide-react";
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/_app/search")({
 });
 
 function SearchPage() {
+  const { t } = useTranslation();
   const [q, setQ] = useState("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<Food[] | null>(null);
@@ -43,8 +45,8 @@ function SearchPage() {
   return (
     <>
       <PageHeader
-        title="Search foods"
-        subtitle="Find packaged foods in Open Food Facts, or pick from your recent items."
+        title={t("pages.searchTitle")}
+        subtitle={t("pages.searchSubtitle")}
         action={
           <Button asChild variant="outline">
             <Link to="/log">

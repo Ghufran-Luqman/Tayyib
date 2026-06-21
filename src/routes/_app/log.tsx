@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { z } from "zod";
@@ -28,6 +29,7 @@ export const Route = createFileRoute("/_app/log")({
 type Mode = "existing" | "custom";
 
 function LogPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { foodId } = Route.useSearch();
   const foods = useFoodFitStore((s) => s.foodsCache);
@@ -105,7 +107,7 @@ function LogPage() {
 
   return (
     <>
-      <PageHeader title="Log a meal" subtitle="Add a packaged food, recent item, or a custom meal." />
+      <PageHeader title={t("pages.logTitle")} subtitle={t("pages.logSubtitle")} />
       <PageBody>
         <div className="mx-auto max-w-2xl space-y-6">
           <div className="inline-flex rounded-xl border bg-card p-1 text-sm">

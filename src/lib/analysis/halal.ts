@@ -1,4 +1,5 @@
 import type { Food, HalalStrictness } from "../foodfit/types";
+import { findTokens } from "./text";
 
 // Lists are non-exhaustive heuristics for ingredient-string scanning.
 // "doubtful" items are commonly questionable; "haram" items are clearly avoided.
@@ -52,13 +53,13 @@ export function checkHalal(food: Food, strictness: HalalStrictness): HalalCheck 
     .toLowerCase();
   if (!text.trim()) return { status: "ok", matches: [] };
 
-  const haramHits = HARAM_TOKENS.filter((t) => text.includes(t));
+  const haramHits = findTokens(text, HARAM_TOKENS);
   if (haramHits.length) return { status: "haram", matches: haramHits };
 
   // Strictness controls how aggressively we flag doubtful items.
   if (strictness === "low") return { status: "ok", matches: [] };
 
-  const doubtful = DOUBTFUL_TOKENS.filter((t) => text.includes(t));
+  const doubtful = findTokens(text, DOUBTFUL_TOKENS);
   if (!doubtful.length) return { status: "ok", matches: [] };
 
   // "medium" only flags the more clearly animal-derived doubtful items.

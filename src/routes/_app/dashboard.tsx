@@ -16,6 +16,8 @@ import { EmptyState } from "@/components/foodfit/EmptyState";
 import { VerdictBadge } from "@/components/foodfit/VerdictBadge";
 import { useFoodFitStore } from "@/lib/foodfit/store";
 import { sumLogs, todaysLogs } from "@/lib/analysis/rules";
+import { DashboardTrackPanel } from "@/components/foodfit/DashboardTrackPanel";
+import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 
 export const Route = createFileRoute("/_app/dashboard")({
@@ -26,6 +28,7 @@ export const Route = createFileRoute("/_app/dashboard")({
 });
 
 function Dashboard() {
+  const { t } = useTranslation();
   const profile = useFoodFitStore((s) => s.profile);
   const mealLogs = useFoodFitStore((s) => s.mealLogs);
   const foodsCache = useFoodFitStore((s) => s.foodsCache);
@@ -34,6 +37,15 @@ function Dashboard() {
   const today = useMemo(() => todaysLogs(mealLogs), [mealLogs]);
   const totals = useMemo(() => sumLogs(today, foodsCache), [today, foodsCache]);
   const limits = profile?.clinicianLimits ?? {};
+
+  const subtitle =
+    profile?.track === "fitness"
+      ? t("dashboard.fitnessSubtitle")
+      : profile?.track === "condition"
+        ? t("dashboard.conditionSubtitle")
+        : profile?.track === "both"
+          ? t("dashboard.bothSubtitle")
+          : t("dashboard.defaultSubtitle");
 
   const recentFoods = useMemo(() => {
     const seen = new Set<string>();
@@ -55,18 +67,18 @@ function Dashboard() {
   return (
     <>
       <PageHeader
-        title={`Hi${profile?.nickname ? `, ${profile.nickname}` : ""} 👋`}
-        subtitle="Here's your day so far. Add a food to get a personalised Tayyib verdict."
+        title={t("dashboard.greeting", { name: profile?.nickname ? `, ${profile.nickname}` : "" }) + " 👋"}
+        subtitle={subtitle}
         action={
           <div className="flex gap-2">
             <Button asChild variant="outline" size="sm">
               <Link to="/scan">
-                <Camera className="mr-2 h-4 w-4" /> Scan
+                <Camera className="mr-2 h-4 w-4" /> {t("dashboard.scan")}
               </Link>
             </Button>
             <Button asChild size="sm" className="bg-fit-green hover:bg-fit-green/90">
               <Link to="/search">
-                <Plus className="mr-2 h-4 w-4" /> Add food
+                <Plus className="mr-2 h-4 w-4" /> {t("dashboard.addFood")}
               </Link>
             </Button>
           </div>
@@ -94,6 +106,9 @@ function Dashboard() {
             </div>
           </div>
         )}
+
+        {/* Track-specific hero panel (fitness vs condition vs both) */}
+        <DashboardTrackPanel profile={profile} totals={totals} className="mb-6" />
 
         {/* Top metric */}
         <div className="grid gap-4 md:grid-cols-3">

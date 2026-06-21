@@ -177,6 +177,8 @@ export interface FoodAnalysis {
   createdAt: string;
 }
 
+export type AppLanguage = "en" | "ar" | "ur";
+
 export interface AppSettings {
   llmExplanationsEnabled: boolean;
   hasSeenDisclaimer: boolean;
@@ -184,6 +186,7 @@ export interface AppSettings {
   largeText: boolean;
   halalStrictness: HalalStrictness;
   theme: "light" | "dark";
+  language: AppLanguage;
 }
 
 

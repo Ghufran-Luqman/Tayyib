@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { format, startOfDay } from "date-fns";
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/_app/history")({
 });
 
 function HistoryPage() {
+  const { t } = useTranslation();
   const logs = useFoodFitStore((s) => s.mealLogs);
   const removeMealLog = useFoodFitStore((s) => s.removeMealLog);
   const [q, setQ] = useState("");
@@ -90,8 +92,8 @@ function HistoryPage() {
   return (
     <>
       <PageHeader
-        title="Meal history"
-        subtitle="Everything you've logged. Search, edit, or export."
+        title={t("pages.historyTitle")}
+        subtitle={t("pages.historySubtitle")}
         action={
           <div className="flex gap-2">
             <Button variant="outline" onClick={exportCsv}>

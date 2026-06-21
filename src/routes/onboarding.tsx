@@ -33,6 +33,7 @@ import type {
 } from "@/lib/foodfit/types";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 
 export const Route = createFileRoute("/onboarding")({
@@ -129,6 +130,7 @@ const nutrientChoices = [
 ];
 
 function Onboarding() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const setProfile = useFoodFitStore((s) => s.setProfile);
   const setSettings = useFoodFitStore((s) => s.setSettings);
@@ -273,7 +275,7 @@ function Onboarding() {
             <span className="font-display text-base font-bold">Tayyib</span>
           </Link>
           <div className="text-xs text-muted-foreground">
-            Step {idx + 1} of {steps.length}
+            {t("onboarding.stepOf", { current: idx + 1, total: steps.length })}
           </div>
         </div>
         <div className="h-1 w-full bg-muted">
@@ -305,7 +307,7 @@ function Onboarding() {
           {idx > 0 ? (
             <Button variant="ghost" onClick={back} size="lg">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
+              {t("common.back")}
             </Button>
           ) : (
             <span />
@@ -316,7 +318,7 @@ function Onboarding() {
             disabled={!canAdvance()}
             className="bg-fit-green px-6 hover:bg-fit-green/90"
           >
-            {idx === steps.length - 1 ? "Save profile" : "Next"}
+            {idx === steps.length - 1 ? t("onboarding.saveProfile") : t("common.next")}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -338,6 +340,7 @@ interface StepProps {
 }
 
 function StepView({ stepId, form, setForm, allergyInput, setAllergyInput, bmi, advance }: StepProps) {
+  const { t } = useTranslation();
   const update = (patch: Partial<HealthProfile>) => setForm({ ...form, ...patch });
   const pick = (patch: Partial<HealthProfile>) => {
     update(patch);
@@ -349,28 +352,28 @@ function StepView({ stepId, form, setForm, allergyInput, setAllergyInput, bmi, a
     case "track":
       return (
         <Question
-          title="What do you want Tayyib to help you with?"
-          hint="You can change this any time in Settings."
+          title={t("onboarding.trackTitle")}
+          hint={t("onboarding.trackHint")}
         >
           <div className="grid gap-3">
             {(
               [
                 {
                   v: "fitness" as OnboardingTrack,
-                  title: "Improve fitness / eat healthier",
-                  desc: "Goals, habits, and cleaner choices.",
+                  title: t("onboarding.trackFitnessTitle"),
+                  desc: t("onboarding.trackFitnessDesc"),
                   Icon: Dumbbell,
                 },
                 {
                   v: "condition" as OnboardingTrack,
-                  title: "Manage a health condition",
-                  desc: "Diabetes, blood pressure, cholesterol, allergies.",
+                  title: t("onboarding.trackConditionTitle"),
+                  desc: t("onboarding.trackConditionDesc"),
                   Icon: HeartPulse,
                 },
                 {
                   v: "both" as OnboardingTrack,
-                  title: "Both",
-                  desc: "Combine fitness goals with condition-aware checks.",
+                  title: t("onboarding.trackBothTitle"),
+                  desc: t("onboarding.trackBothDesc"),
                   Icon: Sparkles,
                 },
               ] as const

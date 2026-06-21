@@ -13,7 +13,10 @@ import {
 import { PageBody, PageHeader } from "@/components/foodfit/AppShell";
 import { MedicalDisclaimerBanner } from "@/components/foodfit/MedicalDisclaimerBanner";
 import { useFoodFitStore } from "@/lib/foodfit/store";
-import type { HalalStrictness } from "@/lib/foodfit/types";
+import type { HalalStrictness, AppLanguage } from "@/lib/foodfit/types";
+import { LANGUAGES } from "@/lib/i18n";
+import { useTranslation } from "react-i18next";
+import { Languages } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_app/settings")({
@@ -22,6 +25,7 @@ export const Route = createFileRoute("/_app/settings")({
 });
 
 function SettingsPage() {
+  const { t } = useTranslation();
   const settings = useFoodFitStore((s) => s.settings);
   const setSettings = useFoodFitStore((s) => s.setSettings);
   const resetAll = useFoodFitStore((s) => s.resetAll);
@@ -29,11 +33,41 @@ function SettingsPage() {
 
   return (
     <>
-      <PageHeader title="Settings" subtitle="Tune the app and manage your data." />
+      <PageHeader title={t("settings.title")} subtitle={t("settings.subtitle")} />
       <PageBody>
         <div className="space-y-4">
           <div className="rounded-2xl border bg-card p-5">
-            <h2 className="font-display text-base font-bold">Profile & targets</h2>
+            <h2 className="flex items-center gap-2 font-display text-base font-bold">
+              <Languages className="h-4 w-4 text-fit-green" />
+              {t("settings.languageTitle")}
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {t("settings.languageDesc")}
+            </p>
+            <div className="mt-4 max-w-sm">
+              <Label htmlFor="language" className="text-sm font-medium">
+                {t("settings.languageLabel")}
+              </Label>
+              <Select
+                value={settings.language}
+                onValueChange={(v) => setSettings({ language: v as AppLanguage })}
+              >
+                <SelectTrigger id="language" className="mt-1">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {LANGUAGES.map((l) => (
+                    <SelectItem key={l.code} value={l.code}>
+                      {l.nativeLabel}
+                      {l.code !== "en" ? ` · ${l.label}` : ""}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="rounded-2xl border bg-card p-5">
+            <h2 className="font-display text-base font-bold">{t("settings.profileTargets")}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Update your nickname, track, allergies, conditions, and nutrient targets.
             </p>
@@ -48,7 +82,7 @@ function SettingsPage() {
           </div>
 
           <div className="rounded-2xl border bg-card p-5">
-            <h2 className="font-display text-base font-bold">Experience</h2>
+            <h2 className="font-display text-base font-bold">{t("settings.experience")}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Choose how much detail Tayyib shows. Simple mode hides advanced
               numbers and uses plainer language.
@@ -99,7 +133,7 @@ function SettingsPage() {
           </div>
 
           <div className="rounded-2xl border bg-card p-5">
-            <h2 className="font-display text-base font-bold">Halal / Tayyib scan</h2>
+            <h2 className="font-display text-base font-bold">{t("settings.halalScan")}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Flag ingredients that are haram or doubtful (mashbooh). This is a
               text-based heuristic — always verify with the manufacturer when it
@@ -129,7 +163,7 @@ function SettingsPage() {
           </div>
 
           <div className="rounded-2xl border bg-card p-5">
-            <h2 className="font-display text-base font-bold">Privacy & data</h2>
+            <h2 className="font-display text-base font-bold">{t("settings.privacyData")}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Your profile and meal logs are stored only in this browser. Clearing
               your browser data will remove them.

@@ -9,6 +9,7 @@ import { MedicalDisclaimerBanner } from "@/components/foodfit/MedicalDisclaimerB
 import { openFoodFactsProvider } from "@/lib/foodProviders";
 import { useFoodFitStore } from "@/lib/foodfit/store";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/_app/scan")({
   head: () => ({ meta: [{ title: "Scan a barcode · Tayyib" }] }),
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/_app/scan")({
 });
 
 function ScanPage() {
+  const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
   const controlsRef = useRef<IScannerControls | null>(null);
   const [scanning, setScanning] = useState(false);
@@ -94,8 +96,8 @@ function ScanPage() {
   return (
     <>
       <PageHeader
-        title="Scan a barcode"
-        subtitle="Point your camera at any packaged food barcode, or type it in by hand."
+        title={t("scan.title")}
+        subtitle={t("scan.subtitle")}
       />
       <PageBody>
         <div className="mx-auto max-w-2xl space-y-6">
@@ -113,13 +115,13 @@ function ScanPage() {
                     <ScanLine className="h-7 w-7" />
                   </div>
                   <div>
-                    <div className="font-display text-lg font-bold">Camera scanner</div>
+                    <div className="font-display text-lg font-bold">{t("scan.cameraTitle")}</div>
                     <p className="mt-1 max-w-xs text-sm text-white/70">
-                      Tap below to enable your camera and scan a barcode.
+                      {t("scan.cameraHint")}
                     </p>
                   </div>
                   <Button onClick={startCamera} className="bg-fit-green hover:bg-fit-green/90">
-                    <Camera className="mr-2 h-4 w-4" /> Start camera
+                    <Camera className="mr-2 h-4 w-4" /> {t("scan.startCamera")}
                   </Button>
                 </div>
               )}
@@ -137,7 +139,7 @@ function ScanPage() {
               {looking && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white">
                   <div className="flex items-center gap-2 text-sm">
-                    <Loader2 className="h-4 w-4 animate-spin" /> Looking up product…
+                    <Loader2 className="h-4 w-4 animate-spin" /> {t("scan.lookingUp")}
                   </div>
                 </div>
               )}
@@ -152,7 +154,7 @@ function ScanPage() {
 
           <div className="rounded-2xl border bg-card p-5">
             <div className="flex items-center gap-2 text-sm font-semibold">
-              <Keyboard className="h-4 w-4" /> Enter barcode manually
+              <Keyboard className="h-4 w-4" /> {t("scan.manualTitle")}
             </div>
             <form onSubmit={submitManual} className="mt-3 flex gap-2">
               <Input
@@ -166,11 +168,11 @@ function ScanPage() {
                 disabled={!manualCode.trim() || looking}
                 className="bg-fit-green hover:bg-fit-green/90"
               >
-                {looking ? <Loader2 className="h-4 w-4 animate-spin" /> : "Look up"}
+                {looking ? <Loader2 className="h-4 w-4 animate-spin" /> : t("scan.lookUp")}
               </Button>
             </form>
             <p className="mt-2 text-xs text-muted-foreground">
-              We query Open Food Facts. Some products may have incomplete nutrition data.
+              {t("scan.offNote")}
             </p>
           </div>
 

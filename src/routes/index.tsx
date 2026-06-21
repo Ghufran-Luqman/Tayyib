@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MedicalDisclaimerBanner } from "@/components/foodfit/MedicalDisclaimerBanner";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,6 +35,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Landing() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen bg-background">
       {/* Nav */}
@@ -55,10 +57,10 @@ function Landing() {
               to="/dashboard"
               className="hidden text-sm text-muted-foreground hover:text-foreground sm:inline-block"
             >
-              Open app
+              {t("common.openApp")}
             </Link>
             <Button asChild size="sm" className="bg-fit-green hover:bg-fit-green/90">
-              <Link to="/onboarding">Get started</Link>
+              <Link to="/onboarding">{t("common.getStarted")}</Link>
             </Button>
           </div>
         </div>
@@ -79,18 +81,15 @@ function Landing() {
               <Sparkles className="h-3.5 w-3.5" /> Personalised nutrition guidance
             </div>
             <h1 className="mt-5 font-display text-4xl font-bold leading-tight tracking-tight md:text-5xl">
-              Find out whether a food is a{" "}
-              <span className="text-fit-green">good fit</span> for your health profile.
+              {t("landing.heroTitle")}
             </h1>
             <p className="mt-4 max-w-xl text-base text-muted-foreground md:text-lg">
-              Scan a barcode, search a product, or log a meal. Tayyib compares it
-              against your stated health profile and your day so far — and gives
-              you a clear, friendly verdict.
+              {t("landing.heroSubtitle")}
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button asChild size="lg" className="bg-fit-green hover:bg-fit-green/90">
                 <Link to="/onboarding">
-                  Create health profile <ArrowRight className="ml-2 h-4 w-4" />
+                  {t("landing.ctaPrimary")} <ArrowRight className="ml-2 h-4 w-4 rtl-flip" />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline">

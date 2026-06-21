@@ -173,3 +173,28 @@
     font-size: 1rem;
   }
 }
+
+/* ---------------------------------------------------------------------------
+ * Localisation: script-aware fonts + right-to-left support.
+ * Language/direction are set on <html> by I18nProvider (lang + dir attributes).
+ * ------------------------------------------------------------------------- */
+html[lang="ar"],
+html[lang="ar"] body {
+  font-family: "Noto Sans Arabic", var(--font-sans);
+}
+html[lang="ur"],
+html[lang="ur"] body {
+  font-family: "Noto Nastaliq Urdu", "Noto Sans Arabic", var(--font-sans);
+  line-height: 2;
+}
+html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4 {
+  font-family: "Noto Sans Arabic", var(--font-display);
+}
+html[lang="ur"] h1, html[lang="ur"] h2, html[lang="ur"] h3, html[lang="ur"] h4 {
+  font-family: "Noto Nastaliq Urdu", "Noto Sans Arabic", var(--font-display);
+}
+
+/* RTL: mirror the few directional icons so arrows point the right way. */
+html[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}

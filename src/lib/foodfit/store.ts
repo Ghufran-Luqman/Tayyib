@@ -38,6 +38,7 @@ const defaultSettings: AppSettings = {
   largeText: false,
   halalStrictness: "off",
   theme: "light",
+  language: "en",
 };
 
 
@@ -107,6 +108,9 @@ export const useFoodFitStore = create<FoodFitState>()(
       name: "foodfit-store-v1",
       onRehydrateStorage: () => (state) => {
         if (!state) return;
+        // Backfill any settings keys added after a user's state was persisted
+        // (e.g. `language`), so new features never read `undefined`.
+        state.settings = { ...defaultSettings, ...state.settings };
         if (!state.seeded) {
           // Seed demo foods (not profile) so search/dashboard never look empty
           const cache: Record<string, Food> = { ...state.foodsCache };

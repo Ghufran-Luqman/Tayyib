@@ -5,6 +5,7 @@ import type {
   Nutrition,
   RuleFlag,
 } from "../foodfit/types";
+import { firstToken } from "./text";
 
 // Thresholds (per serving, WHO/EU front-of-pack-inspired but generic)
 export const TH = {
@@ -33,25 +34,15 @@ const ANIMAL_TOKENS = ["chicken", "beef", "pork", "fish", "gelatin", "lard", "tu
 const ANIMAL_PRODUCT_TOKENS = [...ANIMAL_TOKENS, ...DAIRY_TOKENS, "egg", "honey"];
 
 function textIncludes(haystack: string | undefined, tokens: string[]): string | null {
-  if (!haystack) return null;
-  const lower = haystack.toLowerCase();
-  for (const t of tokens) {
-    if (lower.includes(t)) return t;
-  }
-  return null;
+  return firstToken(haystack, tokens);
 }
 
 export function containsAllergen(food: Food, allergies: string[]): string | null {
   if (!allergies.length) return null;
-  const allTexts = [
-    food.ingredients ?? "",
-    food.allergens.join(" "),
-  ]
-    .join(" ")
-    .toLowerCase();
+  const allTexts = [food.ingredients ?? "", food.allergens.join(" ")].join(" ");
   for (const a of allergies) {
-    const tok = a.trim().toLowerCase();
-    if (tok && allTexts.includes(tok)) return a;
+    const tok = a.trim();
+    if (tok && firstToken(allTexts, [tok])) return a;
   }
   return null;
 }

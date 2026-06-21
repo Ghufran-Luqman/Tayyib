@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { ArrowRight, Plus, Shield, Sparkles, ThumbsUp, TriangleAlert } from "lucide-react";
+import { ArrowRight, Plus, Shield, ThumbsUp, TriangleAlert } from "lucide-react";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { PageBody, PageHeader } from "@/components/foodfit/AppShell";
@@ -12,6 +12,9 @@ import { VerdictBadge } from "@/components/foodfit/VerdictBadge";
 import { EmptyState } from "@/components/foodfit/EmptyState";
 import { useFoodFitStore } from "@/lib/foodfit/store";
 import { analyzeFood } from "@/lib/analysis/analyzeFood";
+import { AiInsightCard } from "@/components/foodfit/AiInsightCard";
+import { sumLogs, todaysLogs } from "@/lib/analysis/rules";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/_app/analyze/$id")({
   head: () => ({ meta: [{ title: "Food analysis · Tayyib" }] }),
@@ -26,6 +29,16 @@ function AnalyzePage() {
   const foods = useFoodFitStore((s) => s.foodsCache);
   const llmEnabled = useFoodFitStore((s) => s.settings.llmExplanationsEnabled);
   const halalStrictness = useFoodFitStore((s) => s.settings.halalStrictness);
+  const language = useFoodFitStore((s) => s.settings.language);
+  const { t } = useTranslation();
+
+  const todayContext = useMemo(() => {
+    const totals = sumLogs(todaysLogs(mealLogs), foods);
+    if (!totals.count) return undefined;
+    return `${totals.count} items, ${Math.round(totals.calories)} kcal, ${Math.round(
+      totals.sodium,
+    )}mg sodium, ${Math.round(totals.sugar)}g sugar`;
+  }, [mealLogs, foods]);
 
   const analysis = useMemo(
     () => (food ? analyzeFood(food, profile, mealLogs, foods, halalStrictness) : null),
@@ -76,12 +89,14 @@ function AnalyzePage() {
             />
 
             {llmEnabled && (
-              <div className="rounded-2xl border bg-card p-5">
-                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-fit-green">
-                  <Sparkles className="h-3.5 w-3.5" /> Personalised summary
-                </div>
-                <p className="mt-2 text-sm text-foreground/90">{analysis.summary}</p>
-              </div>
+              <AiInsightCard
+                food={food}
+                analysis={analysis}
+                profile={profile}
+                language={language}
+                todayContext={todayContext}
+                fallback={analysis.summary}
+              />
             )}
 
             <div className="rounded-2xl border bg-card p-5">

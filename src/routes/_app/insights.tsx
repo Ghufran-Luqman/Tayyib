@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { eachDayOfInterval, format, startOfDay, subDays } from "date-fns";
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/_app/insights")({
 });
 
 function InsightsPage() {
+  const { t } = useTranslation();
   const logs = useFoodFitStore((s) => s.mealLogs);
   const foods = useFoodFitStore((s) => s.foodsCache);
 
@@ -87,7 +89,7 @@ function InsightsPage() {
 
   return (
     <>
-      <PageHeader title="Insights" subtitle="Trends across your last 7 days of logging." />
+      <PageHeader title={t("pages.insightsTitle")} subtitle={t("pages.insightsSubtitle")} />
       <PageBody>
         {!hasData ? (
           <EmptyState

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/_app/profile")({
 });
 
 function ProfilePage() {
+  const { t } = useTranslation();
   const profile = useFoodFitStore((s) => s.profile);
   const loadDemo = useFoodFitStore((s) => s.loadDemoData);
 
@@ -41,8 +43,8 @@ function ProfilePage() {
   return (
     <>
       <PageHeader
-        title="Your profile"
-        subtitle="The information Tayyib uses to personalise verdicts."
+        title={t("pages.profileTitle")}
+        subtitle={t("pages.profileSubtitle")}
         action={
           <Button asChild variant="outline">
             <Link to="/onboarding">

@@ -15,27 +15,29 @@ import {
   User,
 } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { useFoodFitStore } from "@/lib/foodfit/store";
 
 const navItems = [
-  { to: "/dashboard", label: "Dashboard", icon: Home },
-  { to: "/scan", label: "Scan", icon: Camera },
-  { to: "/search", label: "Search", icon: Search },
-  { to: "/history", label: "Meals", icon: History },
-  { to: "/insights", label: "Insights", icon: BarChart3 },
-  { to: "/profile", label: "Profile", icon: User },
+  { to: "/dashboard", key: "nav.dashboard", icon: Home },
+  { to: "/scan", key: "nav.scan", icon: Camera },
+  { to: "/search", key: "nav.search", icon: Search },
+  { to: "/history", key: "nav.meals", icon: History },
+  { to: "/insights", key: "nav.insights", icon: BarChart3 },
+  { to: "/profile", key: "nav.profile", icon: User },
 ] as const;
 
 const bottomItems = [
-  { to: "/dashboard", label: "Home", icon: Home },
-  { to: "/scan", label: "Scan", icon: Camera },
-  { to: "/search", label: "Add", icon: Plus },
-  { to: "/history", label: "Meals", icon: History },
-  { to: "/insights", label: "Insights", icon: BarChart3 },
+  { to: "/dashboard", key: "nav.home", icon: Home },
+  { to: "/scan", key: "nav.scan", icon: Camera },
+  { to: "/search", key: "nav.add", icon: Plus },
+  { to: "/history", key: "nav.meals", icon: History },
+  { to: "/insights", key: "nav.insights", icon: BarChart3 },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const largeText = useFoodFitStore((s) => s.settings.largeText);
   const theme = useFoodFitStore((s) => s.settings.theme);
@@ -72,7 +74,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
           </Link>
           <nav className="flex flex-col gap-1">
-            {navItems.map(({ to, label, icon: Icon }) => {
+            {navItems.map(({ to, key, icon: Icon }) => {
               const active = pathname === to || pathname.startsWith(to + "/");
               return (
                 <Link
@@ -86,7 +88,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   )}
                 >
                   <Icon className="h-4 w-4" />
-                  {label}
+                  {t(key)}
                 </Link>
               );
             })}
@@ -98,7 +100,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              {theme === "dark" ? "Light mode" : "Dark mode"}
+              {theme === "dark" ? t("nav.lightMode") : t("nav.darkMode")}
             </button>
             <Link
               to="/settings"
@@ -110,7 +112,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               )}
             >
               <Settings className="h-4 w-4" />
-              Settings
+              {t("nav.settings")}
             </Link>
             <div className="mt-3 rounded-xl border bg-card p-3">
               <div className="flex items-center gap-2 text-xs font-medium text-fit-green">
@@ -160,7 +162,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Bottom nav (mobile) */}
       <nav className="fixed inset-x-0 bottom-0 z-20 border-t bg-background/95 backdrop-blur md:hidden">
         <div className="mx-auto flex max-w-md items-center justify-around px-2 py-2">
-          {bottomItems.map(({ to, label, icon: Icon }) => {
+          {bottomItems.map(({ to, key, icon: Icon }) => {
             const active = pathname === to;
             return (
               <Link
@@ -172,7 +174,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 )}
               >
                 <Icon className="h-5 w-5" />
-                {label}
+                {t(key)}
               </Link>
             );
           })}
