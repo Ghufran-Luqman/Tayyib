@@ -26,6 +26,7 @@ const DISCLAIMER =
   "Tayyib provides educational nutrition guidance based on your stated profile. It is not medical advice. For medical conditions, allergies, pregnancy, or medication interactions, please consult a qualified healthcare professional.";
 
 function severityWeight(sev: RuleFlag["severity"]): number {
+  if (sev === "unfit") return 80;
   if (sev === "avoid") return 35;
   if (sev === "watch") return 12;
   return 0;
@@ -72,7 +73,7 @@ export function analyzeFood(
     if (hc.status === "haram") {
       flags.push({
         id: "halal-haram",
-        severity: "avoid",
+        severity: "unfit",
         category: "diet",
         message: `Contains ingredients you've asked to avoid (${hc.matches.join(", ")}) — not halal.`,
       });
@@ -121,7 +122,7 @@ export function analyzeFood(
     if (conflict) {
       flags.push({
         id: "diet-conflict",
-        severity: "avoid",
+        severity: "unfit",
         category: "diet",
         message: conflict,
       });
